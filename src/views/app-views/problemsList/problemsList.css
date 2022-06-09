@@ -1,0 +1,10 @@
+.problems-list-title{
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.problem-button-row{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
