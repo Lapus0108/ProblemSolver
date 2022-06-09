@@ -18,18 +18,9 @@ const ProblemPage = (props) => {
 
 
     useEffect(() => {
-        // axios.get(`https://URL/problem?id={id}`).then((res) =>{
-        //     setProblemInfo(res.data.problem)
-        // }).catch(err => console.log(err))
-        const resp = {
-            "id" : 16,
-            "user" : "Lapus12",
-            "name" : "Bubble sort",
-            "upload_date": "25.07.2020",
-            "difficulty" : "medium",
-            "description" : "Emilus - A developer friendly & highly scalable admin dashboard template built with React & top notch technologies stack. It offers a clean code base and detailed documentation which allow you to develop your web application faster and cost effectively. Emilus can be used to build any modern web application including a SaaS, admin panels, CRM, CMS, e-commerce panel, etc"
-        }
-        setProblemInfo(resp)
+        axios.get(`http://localhost:8222/problems/` + id).then((res) =>{
+            setProblemInfo(res.data)
+        }).catch(err => console.log(err))
     }, [])
 
     const submitSolution = (values) => {
@@ -57,8 +48,7 @@ const ProblemPage = (props) => {
                         <div>
                             <p>
 
-                                <span>Upload date: <b>{problemInfo.upload_date}</b></span><br />
-                                <span>Uploaded by: <b>{problemInfo.user}</b></span><br />
+                                <span>Upload date: <b>{problemInfo.dateAdded}</b></span><br />
 
                             </p>
                         </div>
@@ -90,7 +80,7 @@ const mapStateToProps = ({ auth }) => {
     const { token } =  auth;
     return { token}
   };
-  
+
   export default connect(mapStateToProps)(ProblemPage)
 
 

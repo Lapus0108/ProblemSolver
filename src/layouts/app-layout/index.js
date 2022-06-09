@@ -13,9 +13,9 @@ import {
   Grid,
 } from "antd";
 
-import navigationConfig from "configs/NavigationConfig";
-import { 
-  SIDE_NAV_WIDTH, 
+import {navigationConfigStudent, navigationConfigTeacher} from "configs/NavigationConfig";
+import {
+  SIDE_NAV_WIDTH,
   SIDE_NAV_COLLAPSED_WIDTH,
   NAV_TYPE_SIDE,
   NAV_TYPE_TOP,
@@ -29,7 +29,7 @@ const { Content } = Layout;
 const { useBreakpoint } = Grid;
 
 export const AppLayout = ({ navCollapsed, navType, location, direction }) => {
-  const currentRouteInfo = utils.getRouteInfo(navigationConfig, location.pathname)
+  const currentRouteInfo = utils.getRouteInfo(navigationConfigStudent, location.pathname)
   const screens = utils.getBreakPoint(useBreakpoint());
   const isMobile = !screens.includes('lg')
   const isNavSide = navType === NAV_TYPE_SIDE
@@ -50,7 +50,7 @@ export const AppLayout = ({ navCollapsed, navType, location, direction }) => {
   const getLayoutDirectionGutter = () => {
     if(direction === DIR_LTR) {
       return {paddingLeft: getLayoutGutter()}
-    }  
+    }
     if(direction === DIR_RTL) {
       return {paddingRight: getLayoutGutter()}
     }

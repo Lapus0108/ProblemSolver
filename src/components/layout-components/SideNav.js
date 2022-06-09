@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Layout } from 'antd';
 import { connect } from 'react-redux';
@@ -10,14 +11,14 @@ const { Sider } = Layout;
 export const SideNav = ({navCollapsed, sideNavTheme, routeInfo, hideGroupTitle, localization = true }) => {
   const props = { sideNavTheme, routeInfo , hideGroupTitle, localization}
   return (
-    <Sider 
-      className={`side-nav ${sideNavTheme === SIDE_NAV_DARK? 'side-nav-dark' : ''}`} 
-      width={SIDE_NAV_WIDTH} 
+    <Sider
+      className={`side-nav ${sideNavTheme === SIDE_NAV_DARK? 'side-nav-dark' : ''}`}
+      width={SIDE_NAV_WIDTH}
       collapsed={navCollapsed}
     >
       <Scrollbars autoHide>
-        <MenuContent 
-          type={NAV_TYPE_SIDE} 
+        <MenuContent
+          type={NAV_TYPE_SIDE}
           {...props}
         />
       </Scrollbars>

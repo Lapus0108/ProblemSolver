@@ -1,8 +1,8 @@
 import React from "react";
 import { Menu, Dropdown, Avatar } from "antd";
 import { connect } from 'react-redux'
-import { 
-  LogoutOutlined 
+import {
+  LogoutOutlined
 } from '@ant-design/icons';
 import { signOut } from 'redux/actions/Auth';
 import { useHistory } from "react-router-dom";
@@ -24,7 +24,10 @@ export const NavProfile = (props) => {
       </div>
       <div className="nav-profile-body">
         <Menu>
-          <Menu.Item onClick={() => history.push("/auth/login")}>
+          <Menu.Item onClick={() => {
+
+            history.push("/auth/login");
+          }}>
             <span>
               <LogoutOutlined />
               <span className="font-weight-normal">Sign Out</span>

@@ -5,7 +5,30 @@ import {
 } from '@ant-design/icons';
 import {APP_PREFIX_PATH} from 'configs/AppConfig'
 
-const dashBoardNavTree = [
+const dashBoardNavTreeStudent = [
+    {
+        key: 'home',
+        path: `${APP_PREFIX_PATH}/home`,
+        title: 'Home',
+        icon: HomeOutlined,
+        breadcrumb: false,
+        submenu: []
+    },
+    {
+        key: 'problems',
+        path: `${APP_PREFIX_PATH}/problems`,
+        title: 'Problems list',
+        icon: UnorderedListOutlined,
+        breadcrumb: false,
+        submenu: []
+    },
+]
+
+const navigationConfigStudent = [
+    ...dashBoardNavTreeStudent
+]
+
+const dashBoardNavTreeTeacher = [
     {
         key: 'home',
         path: `${APP_PREFIX_PATH}/home`,
@@ -32,8 +55,8 @@ const dashBoardNavTree = [
     }
 ]
 
-const navigationConfig = [
-    ...dashBoardNavTree
+const navigationConfigTeacher = [
+    ...dashBoardNavTreeTeacher
 ]
 
-export default navigationConfig;
+export {navigationConfigStudent, navigationConfigTeacher};

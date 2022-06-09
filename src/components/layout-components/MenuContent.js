@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Menu, Grid } from "antd";
 import IntlMessage from "../util-components/IntlMessage";
 import Icon from "../util-components/Icon";
-import navigationConfig from "configs/NavigationConfig";
+import {navigationConfigStudent, navigationConfigTeacher} from "configs/NavigationConfig";
 import { connect } from "react-redux";
 import { SIDE_NAV_LIGHT, NAV_TYPE_SIDE } from "constants/ThemeConstant";
 import utils from 'utils'
@@ -32,6 +32,8 @@ const setDefaultOpen = (key) => {
 const SideNavContent = (props) => {
 	const { sideNavTheme, routeInfo, hideGroupTitle, localization, onMobileNavToggle } = props;
 	const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg')
+    const navigationConfig = props?.token?.role === "student" ? navigationConfigStudent : navigationConfigTeacher;
+
 	const closeMobileNav = () => {
 		if (isMobile) {
 			onMobileNavToggle(false)
@@ -98,6 +100,7 @@ const SideNavContent = (props) => {
 
 const TopNavContent = (props) => {
   const { topNavColor, localization } = props;
+  const navigationConfig = props?.token?.role === "student" ? navigationConfigStudent : navigationConfigTeacher;
   return (
     <Menu mode="horizontal" style={{ backgroundColor: topNavColor }}>
       {navigationConfig.map((menu) =>

@@ -14,48 +14,15 @@ import axios from "axios";
 import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
-const problemsDummy = [
-    {
-        "id": 1,
-        "name": "Bubble sort",
-        "id_user" : 4,
-        "description": "Pentru fiecare pereche de elemente consecutive din vectorul vv, dacă cele două numere nu sunt în ordine crescătoare, le inversăm. Repetăm procesul cât timp vectorul nu este sortat. Ne dăm seama că nu am terminat de sortat vectorul dacă la parcurgerea sa am efectuat măcar o interschimbare.",
-        "difficulty": "hard",
-        "total_solved": 32,
-        "total_correct": 27,
-        "date_added": "14.05.2022"
-    },
-    {
-        "id": 2,
-        "id_user" : 4,
-        "name": "Merge sort",
-        "description": "Pentru fiecare pereche de elemente consecutive din vectorul vv, dacă cele două numere nu sunt în ordine crescătoare, le inversăm. Repetăm procesul cât timp vectorul nu este sortat. Ne dăm seama că nu am terminat de sortat vectorul dacă la parcurgerea sa am efectuat măcar o interschimbare.",
-        "difficulty": "easy",
-        "total_solved": 16,
-        "total_correct": 15,
-        "date_added": "11.05.2022"
-    },
-    {
-        "id": 3,
-        "id_user" : 3,
-        "name": "Heap sort",
-        "description": "Pentru fiecare pereche de elemente consecutive din vectorul vv, dacă cele două numere nu sunt în ordine crescătoare, le inversăm. Repetăm procesul cât timp vectorul nu este sortat. Ne dăm seama că nu am terminat de sortat vectorul dacă la parcurgerea sa am efectuat măcar o interschimbare.",
-        "difficulty": "medium",
-        "total_solved": 17,
-        "total_correct": 3,
-        "date_added": "12.05.2022"
-    }
-]
-
-
 const ProblemsList = (props) => {
-    const [problems, setProblems] = useState(problemsDummy);
+    const [problems, setProblems] = useState([]);
     const history = useHistory();
 
     useEffect(() => {
-        axios.get(`https://URL/problems`)
+        axios.get(`http://localhost:8222/problems/`)
             .then(res => {
-                setProblems(res.data.problems);
+                console.log(res.data)
+                setProblems(res.data);
             })
     }, [])
 
@@ -120,20 +87,20 @@ const ProblemsList = (props) => {
         <Card>
             <Flex alignItems="center" justifyContent="between">
                 <ItemHeader name={data.name} category={data.difficulty} />
-                {props?.token?.role == "student" && props?.token?.id == data.id_user && 
+                {props?.token?.role == "student" && props?.token?.id == data.id_user &&
                 <ItemAction id={data.id} removeId={removeId} />}
             </Flex>
             <div className="mt-2">
                 <ItemInfo
-                    totalSolved={data.total_solved}
-                    totalCorrectSolved={data.total_correct}
-                    dateAdded={data.date_added}
+                    totalSolved={data.totalSolved}
+                    totalCorrectSolved={data.totalCorrect}
+                    dateAdded={data.dateAdded}
                 />
             </div>
             <div className="mt-3">
-                <ItemProgress progression={Math.round((data.total_correct / data.total_solved) * 100)} />
+                <ItemProgress progression={Math.round((data.totalCorrect / data.totalSolved) * 100)} />
             </div>
-            
+
             <div className="mt-3 problem-button-row">
                 <Button icon={<EyeOutlined />} type="primary" htmlType="submit" shape="round" onClick={() => history.push(`/app/problem/${data.id}`)}>
                     See details
@@ -182,5 +149,5 @@ const mapStateToProps = ({ auth }) => {
     const { token } =  auth;
     return { token}
   };
-  
+
   export default connect(mapStateToProps)(ProblemsList)

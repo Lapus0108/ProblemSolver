@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { 
+import {
 	DashboardOutlined,
 	AppstoreOutlined,
 	AntDesignOutlined,
@@ -9,7 +9,7 @@ import {
 import { Link } from "react-router-dom";
 import { AutoComplete, Input } from 'antd';
 import IntlMessage from 'components/util-components/IntlMessage';
-import navigationConfig from "configs/NavigationConfig";
+import {navigationConfigStudent, navigationConfigTeacher} from "configs/NavigationConfig";
 
 function getOptionList (navigationTree, optionTree) {
 	optionTree = optionTree ? optionTree : [];
@@ -21,10 +21,10 @@ function getOptionList (navigationTree, optionTree) {
 			getOptionList(navItem.submenu, optionTree);
 		}
 	}
-	return optionTree 
+	return optionTree
 }
 
-const optionList = getOptionList(navigationConfig)
+const optionList = getOptionList(navigationConfigStudent)
 
 const getCategoryIcon = category => {
 	switch (category) {
@@ -79,7 +79,7 @@ const SearchInput = props => {
 		setValue(searchText)
 		setOptions(!searchText ? [] : searchResult(searchText))
 	};
-	
+
 	const autofocus = () => {
 		inputRef.current.focus();
 	}
@@ -90,14 +90,14 @@ const SearchInput = props => {
 
 	return (
 		<AutoComplete
-			ref={inputRef} 
+			ref={inputRef}
 			className={`nav-search-input ${isMobile? 'is-mobile' : ''} ${mode === 'light' ? 'light' : ''}`}
 			dropdownClassName="nav-search-dropdown"
 			options={options}
 			onSelect={onSelect}
 			onSearch={onSearch}
 			value={value}
-			filterOption={(inputValue, option) => 
+			filterOption={(inputValue, option) =>
 				option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
 			}
 		>
