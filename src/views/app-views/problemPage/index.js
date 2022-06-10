@@ -68,16 +68,16 @@ const ProblemPage = (props) => {
         <div className="text-right">
           <Tag
             className="mr-0"
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", textTransform: "capitalize" }}
             color={
-              record.status === "Correct"
+              record.status === "correct"
                 ? "cyan"
-                : record.status === "Wrong"
+                : record.status === "wrong"
                 ? "red"
                 : "yellow"
             }
             onClick={
-              record.status == "Check"
+              record.status == "check" && props.token.id == record.teacherId
                 ? () => {
                     displayModal();
                     setActiveSolution(record.id);
@@ -112,18 +112,15 @@ const ProblemPage = (props) => {
 
   const handleSendValidation = (validationResp) => {
     const payload = {
-      solutionId: activeSolution,
       verdict: validationResp,
     };
 
     axios
-      .post("http://localhost:8222/review", payload)
+      .post(`http://localhost:8222/solutions/${activeSolution}`, payload)
       .then((res) => {
-        if (res.data.success == 1) {
-          getProblemData();
-          setModalVisible(false);
-          setActiveSolution(null);
-        }
+        getProblemData();
+        setModalVisible(false);
+        setActiveSolution(null);
       })
       .catch((err) => console.log(err));
   };
@@ -136,9 +133,9 @@ const ProblemPage = (props) => {
     const payload = {
       problemId: parseInt(id, 10),
       userId: props.token.id,
-      solution: values.solution,
+      answer: values.solution,
     };
-    axios.post("https://URL/send-solution", payload).then((res) => {
+    axios.post("http://localhost:8222/solutions/", payload).then((res) => {
       if (res.data.success == 1) {
         history.push("/app/problems");
       }
