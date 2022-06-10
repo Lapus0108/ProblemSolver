@@ -1,12 +1,9 @@
 import React from "react";
 import { Menu, Dropdown, Avatar } from "antd";
-import { connect } from 'react-redux'
-import {
-  LogoutOutlined
-} from '@ant-design/icons';
-import { signOut } from 'redux/actions/Auth';
+import { connect } from "react-redux";
+import { LogoutOutlined } from "@ant-design/icons";
+import { signOutSuccess } from "redux/actions/Auth";
 import { useHistory } from "react-router-dom";
-
 
 export const NavProfile = (props) => {
   const history = useHistory();
@@ -18,16 +15,23 @@ export const NavProfile = (props) => {
           <Avatar size={45} src={profileImg} />
           <div className="pl-3">
             <h4 className="mb-0">{props?.token?.user}</h4>
-            <span className="text-muted" style={{textTransform: "capitalize"}}>{props?.token?.role}</span>
+            <span
+              className="text-muted"
+              style={{ textTransform: "capitalize" }}
+            >
+              {props?.token?.role}
+            </span>
           </div>
         </div>
       </div>
       <div className="nav-profile-body">
         <Menu>
-          <Menu.Item onClick={() => {
-
-            history.push("/auth/login");
-          }}>
+          <Menu.Item
+            onClick={() => {
+              props.signOutSuccess();
+              history.push("/auth/login");
+            }}
+          >
             <span>
               <LogoutOutlined />
               <span className="font-weight-normal">Sign Out</span>
@@ -46,11 +50,15 @@ export const NavProfile = (props) => {
       </Menu>
     </Dropdown>
   );
-}
-
-const mapStateToProps = ({ auth }) => {
-  const { token } =  auth;
-  return { token}
 };
 
-export default connect(mapStateToProps)(NavProfile)
+const mapStateToProps = ({ auth }) => {
+  const { token } = auth;
+  return { token };
+};
+
+const mapDispatchToProps = {
+  signOutSuccess,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavProfile);
