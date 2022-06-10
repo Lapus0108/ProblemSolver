@@ -122,15 +122,9 @@ const ProblemsList = (props) => {
   );
 
   const deleteProblem = (id) => {
-    const payload = {
-      id_user: props.token.id,
-      id_problem: id,
-    };
-    axios.post("https://URL/delete-problem", payload).then((res) => {
-      if (res.data.success == 1) {
-        const data = problems.filter((elm) => elm.id !== id);
-        setProblems(data);
-      }
+    axios.delete(`http://localhost:8222/problems/${id}`).then((res) => {
+      const data = problems.filter((elm) => elm.id !== id);
+      setProblems(data);
     });
   };
 

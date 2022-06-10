@@ -8,39 +8,6 @@ import { useHistory, useParams } from "react-router-dom";
 
 const { TextArea } = Input;
 
-const solutionsRes = [
-  {
-    id: "5331",
-    name: "Clayton Bates",
-    upload_date: "8 May 2020",
-    status: "Correct",
-  },
-  {
-    id: "5332",
-    name: "Gabriel Frazier",
-    upload_date: "6 May 2020",
-    status: "Correct",
-  },
-  {
-    id: "5333",
-    name: "Debra Hamilton",
-    upload_date: "1 May 2020",
-    status: "Wrong",
-  },
-  {
-    id: "5334",
-    name: "Stacey Ward",
-    upload_date: "28 April 2020",
-    status: "Check",
-  },
-  {
-    id: "5335",
-    name: "Troy Alexander",
-    upload_date: "28 April 2020",
-    status: "Check",
-  },
-];
-
 const ProblemPage = (props) => {
   const { id } = useParams();
   const history = useHistory();
@@ -53,12 +20,12 @@ const ProblemPage = (props) => {
   const tableColumns = [
     {
       title: "Student",
-      dataIndex: "name",
+      dataIndex: "userName",
       key: "name",
     },
     {
       title: "Upload date",
-      dataIndex: "upload_date",
+      dataIndex: "dateAdded",
       key: "upload_date",
     },
     {
@@ -77,7 +44,8 @@ const ProblemPage = (props) => {
                 : "yellow"
             }
             onClick={
-              record.status == "check" && props.token.id == record.teacherId
+              record.status == "check" &&
+              props.token.id == problemInfo.teacherId
                 ? () => {
                     displayModal();
                     setActiveSolution(record.id);
@@ -101,9 +69,9 @@ const ProblemPage = (props) => {
       .get(`http://localhost:8222/problems/` + id)
       .then((res) => {
         setProblemInfo(res.data);
+        setSolutions(res.data.solutions);
       })
       .catch((err) => console.log(err));
-    setSolutions(solutionsRes);
   };
 
   const displayModal = () => {
@@ -116,7 +84,11 @@ const ProblemPage = (props) => {
     };
 
     axios
-      .post(`http://localhost:8222/solutions/${activeSolution}`, payload)
+      .patch(
+        `http://localhost:8222/solutions/${activeSolution}`,
+        validationResp,
+        { headers: { "Content-Type": "text/plain" } }
+      )
       .then((res) => {
         getProblemData();
         setModalVisible(false);
@@ -135,11 +107,13 @@ const ProblemPage = (props) => {
       userId: props.token.id,
       answer: values.solution,
     };
-    axios.post("http://localhost:8222/solutions/", payload).then((res) => {
-      if (res.data.success == 1) {
-        history.push("/app/problems");
-      }
-    });
+    axios
+      .post("http://localhost:8222/solutions/", payload)
+      .then((res) => {
+        form.resetFields();
+        getProblemData();
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -172,27 +146,31 @@ const ProblemPage = (props) => {
               </div>
             </div>
             <p class="problem-description">{problemInfo.description}</p>
-            {props?.token?.role == "student" && (
-              <Form form={form} name="control-hooks" onFinish={submitSolution}>
-                <Form.Item name="solution" rules={[{ required: true }]}>
-                  <TextArea
-                    rows={7}
-                    placeholder="Upload problem solution in order to be reviewed by the teacher"
-                  />
-                </Form.Item>
-                <Form.Item style={{ float: "right" }}>
-                  <Button
-                    icon={<PlusOutlined />}
-                    type="primary"
-                    htmlType="submit"
-                    shape="round"
-                    disabled={props.token.id == problemInfo.teacherId}
-                  >
-                    Upload solution
-                  </Button>
-                </Form.Item>
-              </Form>
-            )}
+            {props?.token?.role == "student" &&
+              props.token.id != problemInfo.teacherId && (
+                <Form
+                  form={form}
+                  name="control-hooks"
+                  onFinish={submitSolution}
+                >
+                  <Form.Item name="solution" rules={[{ required: true }]}>
+                    <TextArea
+                      rows={7}
+                      placeholder="Upload problem solution in order to be reviewed by the teacher"
+                    />
+                  </Form.Item>
+                  <Form.Item style={{ float: "right" }}>
+                    <Button
+                      icon={<PlusOutlined />}
+                      type="primary"
+                      htmlType="submit"
+                      shape="round"
+                    >
+                      Upload solution
+                    </Button>
+                  </Form.Item>
+                </Form>
+              )}
           </Card>
         )}
         <Card title="Uploaded solutions">
